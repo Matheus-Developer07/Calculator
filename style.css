@@ -90,6 +90,9 @@ body{
     width: 100%;
     height: 100%;
 }
+.button:hover{
+    background-color: #7a7d80;
+}
 .spanResult{
     background-color: white;
     font-size: 5vw;
