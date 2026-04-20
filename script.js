@@ -1,7 +1,8 @@
 const container = document.querySelector("#layout")
-const buttons = document.querySelectorAll("button")
+const buttons = document.querySelectorAll("#layout .button")
 const result = document.querySelector(".spanResult")
 const body = document.body
+const backspace = document.querySelector("#backspace")
 
 const begginer = document.createElement("div")
 begginer.classList.add("begginer")
@@ -34,68 +35,25 @@ function div(a, b) {
 function calculator(){
     let rst = 0
     if(operator == "+"){
-        rst = add(value1, value2)
+        rst = add(Number(value1), Number(value2))
     }else if(operator == "-"){
-        rst = sub(value1, value2)
+        rst = sub(Number(value1), Number(value2))
     }else if(operator == "*"){
-        rst = multiply(value1, value2)
+        rst = multiply(Number(value1), Number(value2))
     }else if(operator == "/"){
-        rst = div(value1, value2)
+        rst = div(Number(value1), Number(value2))
     }else{}
 
-    result.innerHTML = rst
-}
-
-function enter3(){
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            value2 = Number(value2)
-            result.textContent = value2
-            calculator()
-        }
-
-    })
-}
-
-function funValue2(){
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if(!isNaN(btn.textContent)){
-                value2 = value2 + btn.textContent
-            }
-        })
-    })
-    enter3()
-}
-
-function enter2() {
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            result.textContent = operator
-        }
-    })
-    funValue2()
-}
-
-function funOperator(){
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if(isNaN(btn.textContent)){
-                operator = btn.textContent
-            }
-        })
-    })
-    enter2()
+    result.textContent = rst
 }
 
 function enter() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             value1 = Number(value1)
-            result.textContent = value1
-            funOperator()
+            value2 = Number(value2)
+            calculator()
         }
-
     })
 }
 
@@ -103,10 +61,34 @@ function start() {
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
             if(!isNaN(btn.textContent)){
-                value1 = value1 + btn.textContent
+                if(operator == ""){
+                    value1 = value1 + btn.textContent
+                    result.textContent = value1
+                }else{
+                    value2 = value2 + btn.textContent
+                    result.textContent = value2
+                }
+            }else{
+                if(btn.textContent == "+" || btn.textContent == "-" || btn.textContent == "/" || btn.textContent == "*"){
+                    operator = btn.textContent
+                    result.textContent = operator
+                }else if(btn.textContent == "="){
+                    value1 = Number(value1)
+                    value2 = Number(value2)
+                calculator()
+                }
             }
         })
     })
+    backspace.addEventListener('click', () => {
+        if (operator === "") {
+            value1 = value1.slice(0, -1)
+                result.textContent = value1
+        } else {
+            value2 = value2.slice(0, -1)
+            result.textContent = value2
+        }
+    }) 
     enter()
 }
 
