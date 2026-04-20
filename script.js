@@ -32,8 +32,29 @@ function div(a, b) {
     return a / b
 }
 
+function adjustForm (a){
+    return Number(a).toExponential(10)
+}
+
+function adjustFont() {
+    const length = result.textContent.length
+
+    if(length > 22){
+        result.textContent = Number(result.textContent).toExponential(10) 
+    }else if(length > 17){
+        result.style.fontSize = "2vw"
+    }else if (length > 10) {
+        result.style.fontSize = "3vw"
+    } else if (length > 5) {
+        result.style.fontSize = "4vw"
+    } else {
+        result.style.fontSize = "5vw"
+    }
+}
+
 function calculator(){
     let rst = 0
+    
     if(operator == "+"){
         rst = add(Number(value1), Number(value2))
     }else if(operator == "-"){
@@ -45,6 +66,11 @@ function calculator(){
     }else{}
 
     result.textContent = rst
+    adjustFont()
+
+    value1 = String(rst)
+    value2 = ""
+    operator = ""
 }
 
 function enter() {
@@ -64,9 +90,11 @@ function start() {
                 if(operator == ""){
                     value1 = value1 + btn.textContent
                     result.textContent = value1
+                    adjustFont()
                 }else{
                     value2 = value2 + btn.textContent
                     result.textContent = value2
+                    adjustFont()
                 }
             }else{
                 if(btn.textContent == "+" || btn.textContent == "-" || btn.textContent == "/" || btn.textContent == "*"){
@@ -81,12 +109,15 @@ function start() {
         })
     })
     backspace.addEventListener('click', () => {
-        if (operator === "") {
-            value1 = value1.slice(0, -1)
-                result.textContent = value1
-        } else {
+        if (value2 !== "") {
             value2 = value2.slice(0, -1)
             result.textContent = value2
+        } else if (operator !== "") {
+            operator = ""
+            result.textContent = value1
+        } else {
+            value1 = value1.slice(0, -1)
+            result.textContent = value1
         }
     }) 
     enter()
